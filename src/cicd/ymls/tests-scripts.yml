@@ -1,0 +1,21 @@
+.script:clang-tests-script:
+  script:
+    - SENT_MESSAGE="Start clang tests"
+    - !reference [.script:telegram-message]
+    - apt update && apt install clang-format -y
+    - cp ./materials/linters/.clang-format ./src/cat/.clang-format
+    - cp ./materials/linters/.clang-format ./src/grep/.clang-format
+    - cp ./materials/linters/.clang-format ./src/common/.clang-format
+    - clang-format -Werror -n ./src/cat/*.c
+    - clang-format -Werror -n ./src/grep/*.c
+    - clang-format -Werror -n ./src/common/*.c
+
+.script:int-tests-script:
+  script:
+    - apt update && apt install python3 -y && ln -sf python3 /usr/bin/python && apt install python3-pytest -y && apt install curl -y
+    - SENT_MESSAGE="Start integration tests"
+    - !reference [.script:telegram-message]
+    - cp s21_cat materials/cicd/tests/cat_tests/s21_cat
+    - cp s21_grep materials/cicd/tests/grep_tests/s21_grep
+    - cd materials/cicd/tests/
+    - pytest test_pytest.py --junitxml=report.xml -v

@@ -1,0 +1,123 @@
+abc input_test1.txt
+abc input_test2.txt
+abc input_test3.txt
+abc input_test5.txt
+abc input_test1.txt input_test2.txt input_test3.txt
+
+-e abc input_test1.txt
+-e abc input_test5.txt
+-e abc input_test1.txt input_test2.txt
+-e abc -e 111 input_test1.txt input_test2.txt
+
+-i AbC input_test1.txt
+-i AbC input_test5.txt
+-i AbC input_test1.txt input_test2.txt
+
+-v AbC input_test1.txt
+-v AbC input_test5.txt
+-v AbC input_test1.txt input_test2.txt
+
+-c abc input_test1.txt
+-c abc input_test5.txt
+-c abc input_test1.txt input_test2.txt input_test3.txt
+-c 111 input_test1.txt
+-c 222 input_test1.txt input_test2.txt input_test3.txt
+
+-l abc input_test1.txt
+-l abc input_test5.txt
+-l abc input_test1.txt input_test2.txt input_test3.txt
+-l 111 input_test1.txt
+-l 222 input_test1.txt input_test2.txt input_test3.txt
+
+-n abc input_test1.txt
+-n abc input_test5.txt
+-n AbC input_test1.txt input_test2.txt input_test3.txt
+-n 111 input_test1.txt
+-n 222 input_test1.txt input_test2.txt input_test3.txt
+
+-h abc input_test1.txt
+-h abc input_test5.txt
+-h AbC input_test1.txt input_test2.txt input_test3.txt
+-h 111 input_test1.txt
+-h 222 input_test1.txt input_test2.txt input_test3.txt
+
+-s abc input_test1.txt input_testNONEXISTENT.txt
+-s abc input_test5.txt input_testNONEXISTENT.txt
+-s abc input_testNONEXISTENT.txt
+
+-f pattern_1.txt input_test1.txt
+-f pattern_1.txt input_test5.txt
+-f pattern_1.txt -f pattern_2.txt input_test1.txt
+-f pattern_1.txt -f pattern_2.txt input_test1.txt input_test2.txt
+
+-o abc input_test1.txt
+-o AbC input_test1.txt input_test2.txt input_test3.txt
+-o 111 input_test1.txt
+-o 222 input_test1.txt input_test2.txt input_test3.txt
+
+-o -f pattern_emails.txt input_emails.txt
+-f pattern_emails.txt input_emails.txt
+-o [a-zA-Z0-9._]\+@[a-zA-Z]\+\.[a-zA-Z.]\{2,\} input_emails.txt
+-co -f pattern_emails.txt input_emails.txt
+
+-o -f pattern_emails.txt input_emails.txt input_test1.txt
+-co -f pattern_emails.txt input_emails.txt input_test2.txt
+-coh -f pattern_emails.txt input_emails.txt input_test2.txt
+-v -f pattern_emails.txt input_emails.txt input_test2.txt
+
+-iv -f pattern_1.txt input_test1.txt input_test2.txt
+-ic -f pattern_1.txt input_test1.txt input_test2.txt
+-il -f pattern_1.txt input_test1.txt input_test2.txt
+-in -f pattern_1.txt input_test1.txt input_test2.txt
+-ih -f pattern_1.txt input_test1.txt input_test2.txt
+-is -f pattern_1.txt input_test1.txt input_test2.txt
+-io -f pattern_1.txt input_test1.txt input_test2.txt
+-vi -f pattern_1.txt input_test1.txt input_test2.txt
+-vc -f pattern_1.txt input_test1.txt input_test2.txt
+-vl -f pattern_1.txt input_test1.txt input_test2.txt
+-vn -f pattern_1.txt input_test1.txt input_test2.txt
+-vh -f pattern_1.txt input_test1.txt input_test2.txt
+-vs -f pattern_1.txt input_test1.txt input_test2.txt
+-vo -f pattern_1.txt input_test1.txt input_test2.txt
+-ci -f pattern_1.txt input_test1.txt input_test2.txt
+-cv -f pattern_1.txt input_test1.txt input_test2.txt
+-cl -f pattern_1.txt input_test1.txt input_test2.txt
+-cn -f pattern_1.txt input_test1.txt input_test2.txt
+-ch -f pattern_1.txt input_test1.txt input_test2.txt
+-cs -f pattern_1.txt input_test1.txt input_test2.txt
+-co -f pattern_1.txt input_test1.txt input_test2.txt
+-li -f pattern_1.txt input_test1.txt input_test2.txt
+-lv -f pattern_1.txt input_test1.txt input_test2.txt
+-lc -f pattern_1.txt input_test1.txt input_test2.txt
+-ln -f pattern_1.txt input_test1.txt input_test2.txt
+-lh -f pattern_1.txt input_test1.txt input_test2.txt
+-ls -f pattern_1.txt input_test1.txt input_test2.txt
+-lo -f pattern_1.txt input_test1.txt input_test2.txt
+-ni -f pattern_1.txt input_test1.txt input_test2.txt
+-nv -f pattern_1.txt input_test1.txt input_test2.txt
+-nc -f pattern_1.txt input_test1.txt input_test2.txt
+-nl -f pattern_1.txt input_test1.txt input_test2.txt
+-nh -f pattern_1.txt input_test1.txt input_test2.txt
+-ns -f pattern_1.txt input_test1.txt input_test2.txt
+-no -f pattern_1.txt input_test1.txt input_test2.txt
+-hi -f pattern_1.txt input_test1.txt input_test2.txt
+-hv -f pattern_1.txt input_test1.txt input_test2.txt
+-hc -f pattern_1.txt input_test1.txt input_test2.txt
+-hl -f pattern_1.txt input_test1.txt input_test2.txt
+-hn -f pattern_1.txt input_test1.txt input_test2.txt
+-hs -f pattern_1.txt input_test1.txt input_test2.txt
+-ho -f pattern_1.txt input_test1.txt input_test2.txt
+-si -f pattern_1.txt input_test1.txt input_test2.txt
+-sv -f pattern_1.txt input_test1.txt input_test2.txt
+-sc -f pattern_1.txt input_test1.txt input_test2.txt
+-sl -f pattern_1.txt input_test1.txt input_test2.txt
+-sn -f pattern_1.txt input_test1.txt input_test2.txt
+-sh -f pattern_1.txt input_test1.txt input_test2.txt
+-so -f pattern_1.txt input_test1.txt input_test2.txt
+-oi -f pattern_1.txt input_test1.txt input_test2.txt
+-ov -f pattern_1.txt input_test1.txt input_test2.txt
+-oc -f pattern_1.txt input_test1.txt input_test2.txt
+-ol -f pattern_1.txt input_test1.txt input_test2.txt
+-on -f pattern_1.txt input_test1.txt input_test2.txt
+-oh -f pattern_1.txt input_test1.txt input_test2.txt
+-os -f pattern_1.txt input_test1.txt input_test2.txt

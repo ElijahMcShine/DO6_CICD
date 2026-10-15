@@ -1,0 +1,9 @@
+.script:deploy-script:
+  script:
+    - apt update && apt upgrade -y && apt install openssh-client -y && apt install sshpass && apt install curl -y
+    - SENT_MESSAGE="Start deploy procedure"
+    - !reference [.script:telegram-message]
+    - ssh-keygen -t rsa -b 2048 -q -N "" -f ~/.ssh/id_rsa
+    - sshpass -p $PROD_PASSWORD ssh-copy-id -f -o StrictHostKeyChecking=no root@192.168.11.141
+    - scp s21_cat root@192.168.11.141:/usr/local/bin
+    - scp s21_grep root@192.168.11.141:/usr/local/bin

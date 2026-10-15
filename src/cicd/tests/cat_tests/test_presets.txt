@@ -1,0 +1,41 @@
+-b input_test1.txt
+-e input_test1.txt
+-n input_test1.txt
+-s input_test1.txt
+-t input_test1.txt
+-E input_test1.txt
+-T input_test1.txt
+-bn input_test1.txt 
+-be input_test1.txt 
+-bE input_test1.txt 
+-sb input_test1.txt 
+-sn input_test1.txt 
+--squeeze-blank input_test1.txt 
+--number input_test1.txt 
+--number-nonblank input_test1.txt 
+-b input_test1.txt input_test2.txt
+-e input_test1.txt input_test2.txt
+-n input_test1.txt input_test2.txt
+-t input_test1.txt input_test2.txt
+-E input_test1.txt input_test2.txt
+-T input_test1.txt input_test2.txt
+-bn input_test1.txt input_test2.txt
+-be input_test1.txt input_test2.txt
+-bE input_test1.txt input_test2.txt
+--number input_test1.txt input_test2.txt
+--number-nonblank input_test1.txt input_test2.txt
+-b non_printing.txt 
+-e non_printing.txt 
+-n non_printing.txt 
+-s non_printing.txt 
+-t non_printing.txt 
+-E non_printing.txt 
+-T non_printing.txt 
+-bn non_printing.txt 
+-be non_printing.txt 
+-bE non_printing.txt 
+-sb non_printing.txt 
+-sn non_printing.txt 
+--squeeze-blank non_printing.txt 
+--number non_printing.txt 
+--number-nonblank non_printing.txt 

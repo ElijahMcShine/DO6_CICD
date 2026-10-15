@@ -1,0 +1,66 @@
+default:
+  tags:
+    - stilwool
+    - do6
+    - shell
+
+stages:
+  - build
+  - tests
+  - deploy
+
+build-job:
+  stage: build
+  script:
+    - make -C ./src/cat/
+    - make -C ./src/grep/
+    - mv src/cat/s21_cat ./
+    - mv src/grep/s21_grep ./
+  artifacts:
+    paths:
+      - s21_cat
+      - s21_grep
+    expire_in: 30 days
+
+clang-test-job:
+  stage: tests
+  needs:
+    - job: build-job
+      artifacts: false
+  script:
+    - cp ./materials/linters/.clang-format ./src/cat/.clang-format
+    - cp ./materials/linters/.clang-format ./src/grep/.clang-format
+    - cp ./materials/linters/.clang-format ./src/common/.clang-format
+    - clang-format -Werror -n ./src/cat/*.c
+    - clang-format -Werror -n ./src/grep/*.c
+    - clang-format -Werror -n ./src/common/*.c
+
+int-test-job:
+  stage: tests
+  needs:
+    - job: build-job
+      artifacts: true
+    - job: clang-test-job
+      artifacts: false
+  script:
+    - cp s21_cat materials/cicd/tests/cat_tests/s21_cat
+    - cp s21_grep materials/cicd/tests/grep_tests/s21_grep
+    - cd materials/cicd/tests/
+    - python3 test_cat.py
+    - python3 test_grep.py
+
+deploy-on-prod:
+  stage: deploy
+  when: manual
+  image: ubuntu:latest
+  allow_failure: false
+  needs:
+    - job: build-job
+      artifacts: true
+    - job: clang-test-job
+      artifacts: false
+    - job: int-test-job
+      artifacts: false
+  script:
+    - scp s21_cat root@192.168.11.141:/usr/local/bin
+    - scp s21_grep root@192.168.11.141:/usr/local/bin

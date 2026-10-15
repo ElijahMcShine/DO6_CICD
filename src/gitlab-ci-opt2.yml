@@ -1,0 +1,89 @@
+stages:
+  - build
+  - tests
+  - deploy
+
+build-job:
+  stage: build
+  image: gcc:latest
+  tags:
+    - stilwool
+    - do6
+    - runner
+  script:
+    - make -C ./src/cat/
+    - make -C ./src/grep/
+    - mv src/cat/s21_cat ./
+    - mv src/grep/s21_grep ./
+  artifacts:
+    paths:
+      - s21_cat
+      - s21_grep
+
+clang-test-job:
+  stage: tests
+  needs:
+    - job: build-job
+      artifacts: false
+  image: gcc:latest
+  tags:
+    - stilwool
+    - do6
+    - runner
+  script:
+    - apt update && apt install clang-format -y
+    - cp ./materials/linters/.clang-format ./src/cat/.clang-format
+    - cp ./materials/linters/.clang-format ./src/grep/.clang-format
+    - cp ./materials/linters/.clang-format ./src/common/.clang-format
+    - clang-format -Werror -n ./src/cat/*.c
+    - clang-format -Werror -n ./src/grep/*.c
+    - clang-format -Werror -n ./src/common/*.c
+
+int-test-job:
+  stage: tests
+  needs:
+    - job: build-job
+      artifacts: true
+    - job: clang-test-job
+      artifacts: false
+  image: ubuntu:latest
+  tags:
+    - stilwool
+    - do6
+    - runner
+  script:
+    - apt update && apt install python3 -y && ln -sf python3 /usr/bin/python && apt install python3-pytest -y
+    - cp s21_cat materials/cicd/tests/cat_tests/s21_cat
+    - cp s21_grep materials/cicd/tests/grep_tests/s21_grep
+    - cd materials/cicd/tests/
+    - pytest test_pytest.py --junitxml=report.xml -v
+  artifacts:
+    when: always
+    paths:
+      - materials/cicd/tests/report.xml
+    reports:
+      junit: materials/cicd/tests/report.xml
+    expire_in: 1 day
+
+deploy-on-prod:
+  stage: deploy
+  when: manual
+  image: ubuntu:latest
+  allow_failure: false
+  needs:
+    - job: build-job
+      artifacts: true
+    - job: clang-test-job
+      artifacts: false
+    - job: int-test-job
+      artifacts: false
+  tags:
+    - stilwool
+    - do6
+    - runner
+  script:
+    - apt update && apt upgrade -y && apt install openssh-client -y && apt install sshpass
+    - ssh-keygen -t rsa -b 2048 -q -N "" -f ~/.ssh/id_rsa
+    - sshpass -p $PROD_PASSWORD ssh-copy-id -f -o StrictHostKeyChecking=no root@192.168.11.141
+    - scp s21_cat root@192.168.11.141:/usr/local/bin
+    - scp s21_grep root@192.168.11.141:/usr/local/bin

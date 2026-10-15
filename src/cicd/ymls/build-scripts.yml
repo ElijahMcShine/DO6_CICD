@@ -1,0 +1,8 @@
+.script:build-script:
+  script:
+    - SENT_MESSAGE="Start build-job of new pipeline"
+    - !reference [.script:telegram-message]
+    - make -C ./src/cat/
+    - make -C ./src/grep/
+    - mv src/cat/s21_cat ./
+    - mv src/grep/s21_grep ./

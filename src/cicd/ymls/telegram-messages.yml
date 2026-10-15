@@ -1,0 +1,42 @@
+.script:telegram-message:
+  - 'curl -s -d "chat_id="$CHAT_ID"&disable_web_page_preview=1&text=$SENT_MESSAGE" https://api.telegram.org/bot$BOT_TOCKEN/sendMessage'
+
+.script:afterscript-build:
+  after_script:
+    - >
+        if [ $CI_JOB_STATUS == 'success' ]; then
+          SENT_MESSAGE="Build-job is finished succesfully"
+        else
+          SENT_MESSAGE="Build-job is failed"
+        fi
+    - !reference [.script:telegram-message]
+
+.script:afterscript-clang:
+  after_script:
+    - >
+        if [ $CI_JOB_STATUS == 'success' ]; then
+          SENT_MESSAGE="Clang test is finished succesfully"
+        else
+          SENT_MESSAGE="Clang test is failed"
+        fi
+    - !reference [.script:telegram-message]
+
+.script:afterscript-int-test:
+  after_script:
+    - >
+        if [ $CI_JOB_STATUS == 'success' ]; then
+          SENT_MESSAGE="Integration test is finished succesfully. Please start deploy procedury manually"
+        else
+          SENT_MESSAGE="Integration test is failed"
+        fi
+    - !reference [.script:telegram-message]
+
+.script:afterscript-deploy:
+  after_script:
+    - >
+        if [ $CI_JOB_STATUS == 'success' ]; then
+          SENT_MESSAGE="Congratulations, we have a new version of program."
+        else
+          SENT_MESSAGE="Deploy is succesfully failed"
+        fi
+    - !reference [.script:telegram-message]

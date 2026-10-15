@@ -1,0 +1,77 @@
+include:
+    - local: '/materials/cicd/ymls/build-scripts.yml'
+    - local: '/materials/cicd/ymls/tests-scripts.yml'
+    - local: '/materials/cicd/ymls/deploy-scripts.yml'
+    - local: '/materials/cicd/ymls/telegram-messages.yml'
+
+default:
+  tags:
+    - stilwool
+    - do6
+    - runner
+
+variables:
+  SENT_MESSAGE: ""
+
+stages:
+  - build
+  - tests
+  - deploy
+
+build-job:
+  stage: build
+  image: gcc:latest
+  extends:
+    - .script:build-script
+    - .script:afterscript-build
+  artifacts:
+    paths:
+      - s21_cat
+      - s21_grep
+
+
+clang-test-job:
+  stage: tests
+  needs:
+    - job: build-job
+      artifacts: false
+  image: gcc:latest
+  extends:
+    - .script:clang-tests-script
+    - .script:afterscript-clang
+
+int-test-job:
+  stage: tests
+  needs:
+    - job: build-job
+      artifacts: true
+    - job: clang-test-job
+      artifacts: false
+  image: ubuntu:latest
+  extends:
+    - .script:int-tests-script
+    - .script:afterscript-int-test
+  artifacts:
+    when: always
+    paths:
+      - materials/cicd/tests/report.xml
+    reports:
+      junit: materials/cicd/tests/report.xml
+    expire_in: 1 day
+
+
+deploy-on-prod:
+  stage: deploy
+  when: manual
+  image: ubuntu:latest
+  allow_failure: false
+  needs:
+    - job: build-job
+      artifacts: true
+    - job: clang-test-job
+      artifacts: false
+    - job: int-test-job
+      artifacts: false
+  extends:
+    - .script:deploy-script
+    - .script:afterscript-deploy
